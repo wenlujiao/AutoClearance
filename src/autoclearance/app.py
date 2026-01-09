@@ -3,10 +3,10 @@ from autoclearance.crew import AutoclearanceCrew
 
 # 1. Page Config
 st.set_page_config(page_title="AutoClearance AI", layout="wide")
-# --- 🔐 简单的密码保护锁 ---
-password = st.sidebar.text_input("🔑 访问密码 (Password)", type="password")
+# --- password seting
+password = st.sidebar.text_input
 if password != "123456":
-    st.info("请输入密码以解锁 AI 功能 | Please enter the password to access.")
+    st.info( Please enter the password to access.")
     st.stop()
 # -------------------------
 st.title("AutoClearance: AI Compliance Audit System")
