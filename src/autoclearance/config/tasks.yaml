@@ -1,0 +1,23 @@
+ingest_task:
+  description: >
+    Analyze the following raw invoice text:
+    "{invoice_data}"
+
+    Extract the following fields: Description, Qty, Unit Price, Total Value, Gross Weight, Net Weight.
+    Automatically correct any obvious OCR scanning errors.
+  expected_output: >
+    A structured list or JSON object containing all extracted fields with corrected values.
+  agent: ingest_agent
+
+audit_task:
+  description: >
+    Review the data extracted by the Ingest Agent.
+    Perform the following statistical checks:
+    1. Verify if (Qty * Unit Price) == Total Value.
+    2. Verify if Gross Weight > Net Weight.
+    
+    If any logic fails, generate a "Risk Alert" report detailing the error.
+    If all logic passes, output "STATUS: PASSED".
+  expected_output: >
+    A final audit report summarizing the validation results and flagging any anomalies.
+  agent: auditor_agent
