@@ -5,6 +5,10 @@ import os
 from pydantic import BaseModel
 from typing import List
 
+class InvoiceInfo(BaseModel):
+    number: str
+    date: str
+
 class InvoiceItem(BaseModel):
     description: str
     quantity: int
@@ -13,7 +17,7 @@ class InvoiceItem(BaseModel):
     weight: float
 
 class AuditResult(BaseModel):
-    invoice_number: str
+    invoice_info: InvoiceInfo
     items: List[InvoiceItem]
     total_value: float
     audit_alerts: List[str]
