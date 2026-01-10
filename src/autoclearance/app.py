@@ -1,4 +1,5 @@
 import streamlit as st
+import PyPDF2  
 from autoclearance.crew import AutoclearanceCrew
 
 # 1. Page Config
@@ -13,22 +14,26 @@ st.title("AutoClearance: AI Compliance Audit System")
 st.markdown("---")
 
 # 2. Sidebar: Input Area
-with st.sidebar:
-    st.header("Invoice Data Entry")
-    
-    # Default test data (with intentional errors)
-    default_invoice = """
-    INVOICE #001
-    Desc: Plastic Toys (Kids)
-    Qty: 100 pcs
-    Unit Price: $5.00
-    Total: $400.00
-    GW: 50kg
-    NW: 60kg
-    """
-    
-    # Input Text Area
-    invoice_input = st.text_area("Paste Invoice Text / OCR Output", value=default_invoice, height=300)
+st.subheader("Upload Invoice (PDF)")
+    uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
+
+    invoice_text = ""
+
+    if uploaded_file is not None:
+        try:
+            pdf_reader = PyPDF2.PdfReader(uploaded_file)
+            for page in pdf_reader.pages:
+                invoice_text += page.extract_text()
+            st.success("PDF read successfully!")
+            
+            with st.expander("View Extracted Text"):
+                st.text(invoice_text)
+                
+        except Exception as e:
+            st.error(f"Error reading PDF: {e}")
+
+    if not invoice_text:
+        invoice_text = st.text_area("Or paste invoice text here:", height=300)
     
     # Run Button
     run_btn = st.button("Start AI Audit", type="primary")
@@ -49,7 +54,7 @@ if run_btn:
     with st.spinner('Processing invoice data...'):
         try:
             # Prepare inputs
-            inputs = {'invoice_data': invoice_input}
+            inputs = {'invoice_data': invoice_text}
             
             # --- Run Crew ---
             crew_output = AutoclearanceCrew().crew().kickoff(inputs=inputs)
