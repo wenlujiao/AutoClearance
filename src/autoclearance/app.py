@@ -3,7 +3,7 @@ import PyPDF2
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from autoclearance.crew import AutoclearanceCrew
+from .crew import AutoclearanceCrew
 
 # 1. Page Config
 st.set_page_config(page_title="AutoClearance AI", layout="wide")
