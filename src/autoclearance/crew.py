@@ -2,6 +2,21 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 import os
+from pydantic import BaseModel
+from typing import List
+
+class InvoiceItem(BaseModel):
+    description: str
+    quantity: int
+    unit_price: float
+    hs_code: str
+    weight: float
+
+class AuditResult(BaseModel):
+    invoice_number: str
+    items: List[InvoiceItem]
+    total_value: float
+    audit_alerts: List[str]
 
 @CrewBase
 class AutoclearanceCrew():
@@ -26,9 +41,10 @@ class AutoclearanceCrew():
 		)
 
 	@task
-	def ingest_task(self) -> Task:
+	def audit_invoice_task(self) -> Task:
 		return Task(
-			config=self.tasks_config['ingest_task'],
+			config=self.tasks_config['audit_invoice_task'],
+			output_json=AuditResult  # 👈 强制 AI 按这个结构输出
 		)
 
 	@task
@@ -45,7 +61,7 @@ class AutoclearanceCrew():
 				self.auditor_agent()
 			],
 			tasks=[
-				self.ingest_task(),
+				self.audit_invoice_task(),
 				self.audit_task()
 			],
 			process=Process.sequential,

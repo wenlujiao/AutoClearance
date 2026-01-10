@@ -68,10 +68,16 @@ if run_btn:
                 inputs = {'invoice_data': invoice_text}
                 result = crew_instance.crew().kickoff(inputs=inputs)
                 
+                # 获取 JSON 字典
+                data = result.to_dict() 
+                
                 # Display Results
                 st.success("Audit Complete!")
                 st.subheader("Audit Report")
-                st.markdown(result)
+                
+                # 现在你可以轻松把它转成 Excel/CSV 了
+                df = pd.DataFrame(data['items'])
+                st.table(df) # 在网页上直接显示漂亮的表格
                 
                 # ... 在 AI 运行结束后 ...
                 try:

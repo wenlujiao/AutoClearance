@@ -1,12 +1,19 @@
-ingest_task:
+audit_invoice_task:
   description: >
-    Analyze the following raw invoice text:
-    "{invoice_data}"
-
-    Extract the following fields: Description, Qty, Unit Price, Total Value, Gross Weight, Net Weight.
-    Automatically correct any obvious OCR scanning errors.
+    分析提供的发票文本：{invoice_data}。
+    1. 提取发票号、日期、买卖双方。
+    2. 提取所有商品项，包括品名、数量、单价、总价。
+    3. 为每个商品项匹配最准确的 6 位 HS Code。
+    4. 计算并核对总重量和逻辑。
   expected_output: >
-    A valid JSON object containing all invoice details, including line items with HS codes, quantities, and weights.
+    一个严格格式化的 JSON 对象，包含以下字段：
+    - "invoice_info": {{ "number": "string", "date": "string" }}
+    - "items": [
+        {{ "description": "string", "quantity": number, "unit_price": number, "hs_code": "string", "weight": number }}
+      ]
+    - "total_value": number
+    - "audit_alerts": ["发现的错误列表"]
+    不要包含任何 Markdown 格式说明符（如 ```json），只返回纯 JSON 字符串。
   agent: ingest_agent
 
 audit_task:
