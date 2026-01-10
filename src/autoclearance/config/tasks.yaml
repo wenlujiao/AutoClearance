@@ -6,14 +6,7 @@ ingest_task:
     Extract the following fields: Description, Qty, Unit Price, Total Value, Gross Weight, Net Weight.
     Automatically correct any obvious OCR scanning errors.
   expected_output: >
-    Only return data in the following JSON format:
-    {
-      "invoice_no": "INV123",
-      "items": [
-        {"desc": "Cotton Shirt", "qty": 100, "price": 10, "hs_code": "6205.20", "weight": 50},
-        {"desc": "Silk Scarf", "qty": 50, "price": 20, "hs_code": "6214.10", "weight": 10}
-      ]
-    }
+    A valid JSON object containing all invoice details, including line items with HS codes, quantities, and weights.
   agent: ingest_agent
 
 audit_task:
