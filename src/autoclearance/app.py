@@ -2,6 +2,7 @@ import streamlit as st
 import PyPDF2
 import pandas as pd
 from io import BytesIO
+import json
 import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -72,32 +73,30 @@ if run_btn:
                 st.subheader("Audit Report")
                 st.markdown(result)
                 
-                # --- Excel Generation Logic ---
-                st.markdown("---")
-                st.subheader("📥 Download Report")
+                # ... 在 AI 运行结束后 ...
+                try:
+                    # 假设 AI 返回的是结构化字符串，我们先把它转成表格
+                    # 这里的 result 最好是经过 AI 处理后的干净数据
+                    data = json.loads(result) # 这里的 result 需确保是 JSON 格式
+                    df_items = pd.DataFrame(data['items'])
 
-                # Convert the result to a DataFrame (Table format)
-                # 目前我们要把 AI 的文字报告放进 Excel
-                df = pd.DataFrame({
-                    "Audit Report": [result],
-                    "Source Data": [invoice_text]
-                })
+                    st.subheader("📦 自动化单证生成")
+                    col1, col2, col3 = st.columns(3)
 
-                # Create an in-memory buffer to save the Excel file
-                buffer = BytesIO()
-                with pd.ExcelWriter(buffer, engine='openpyxl') as writer:
-                    df.to_excel(writer, index=False, sheet_name='Audit Result')
-                
-                # Make sure the buffer is ready to be read
-                buffer.seek(0)
+                    with col1:
+                        # 输出 3：CSV 导出
+                        csv = df_items.to_csv(index=False).encode('utf-8')
+                        st.download_button("下载结构化数据 (CSV)", csv, "clearance_data.csv", "text/csv")
 
-                # Show the Download Button
-                st.download_button(
-                    label="Download Excel Report 📊",
-                    data=buffer,
-                    file_name="audit_report.xlsx",
-                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                )
+                    with col2:
+                        st.button("生成标准发票 (PDF) - 开发中")
+
+                    with col3:
+                        st.button("生成装箱单 (PDF) - 开发中")
+
+                except:
+                    st.warning("AI 返回的不是标准结构，正在尝试解析...")
+                    st.markdown(result)
                 
             except Exception as e:
                 st.error(f"An error occurred: {e}")
