@@ -2,6 +2,7 @@ crewai
 streamlit
 pydantic
 PyPDF2
+openai
 
 
 

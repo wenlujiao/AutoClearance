@@ -13,8 +13,9 @@ class AutoclearanceCrew():
 	def ingest_agent(self) -> Agent:
 		return Agent(
 			config=self.agents_config['ingest_agent'],
-			verbose=True，
-		)llm='gpt-4o-mini',
+			verbose=True,
+			llm='gpt-4o-mini',
+		)
 
 	@agent
 	def auditor_agent(self) -> Agent:
