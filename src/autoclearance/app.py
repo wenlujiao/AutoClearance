@@ -1,5 +1,7 @@
 import streamlit as st
 import PyPDF2
+import pandas as pd
+from io import BytesIO
 import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
