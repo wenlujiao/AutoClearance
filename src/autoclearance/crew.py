@@ -51,12 +51,6 @@ class AutoclearanceCrew():
 			output_json=AuditResult  # Force AI to output in this structure
 		)
 
-	@task
-	def audit_task(self) -> Task:
-		return Task(
-			config=self.tasks_config['audit_task'],
-		)
-
 	@crew
 	def crew(self) -> Crew:
 		return Crew(
@@ -65,8 +59,7 @@ class AutoclearanceCrew():
 				self.auditor_agent()
 			],
 			tasks=[
-				self.audit_invoice_task(),
-				self.audit_task()
+				self.audit_invoice_task()
 			],
 			process=Process.sequential,
 			verbose=True,
