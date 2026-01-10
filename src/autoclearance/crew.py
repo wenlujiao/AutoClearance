@@ -48,7 +48,7 @@ class AutoclearanceCrew():
 	def audit_invoice_task(self) -> Task:
 		return Task(
 			config=self.tasks_config['audit_invoice_task'],
-			output_json=AuditResult  # 👈 强制 AI 按这个结构输出
+			output_json=AuditResult  # Force AI to output in this structure
 		)
 
 	@task

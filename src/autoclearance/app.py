@@ -68,40 +68,40 @@ if run_btn:
                 inputs = {'invoice_data': invoice_text}
                 result = crew_instance.crew().kickoff(inputs=inputs)
                 
-                # 获取 JSON 字典
+                # Get JSON dict
                 data = result.to_dict() 
                 
                 # Display Results
                 st.success("Audit Complete!")
                 st.subheader("Audit Report")
                 
-                # 现在你可以轻松把它转成 Excel/CSV 了
+                # Now you can easily convert it to Excel/CSV
                 df = pd.DataFrame(data['items'])
-                st.table(df) # 在网页上直接显示漂亮的表格
+                st.table(df) # Display a nice table on the web
                 
-                # ... 在 AI 运行结束后 ...
+                # ... After AI run ends ...
                 try:
-                    # 假设 AI 返回的是结构化字符串，我们先把它转成表格
-                    # 这里的 result 最好是经过 AI 处理后的干净数据
-                    data = json.loads(result) # 这里的 result 需确保是 JSON 格式
+                    # Assuming AI returns structured string, convert to table
+                    # Here result should be clean data processed by AI
+                    data = json.loads(result) # Ensure result is JSON format
                     df_items = pd.DataFrame(data['items'])
 
-                    st.subheader("📦 自动化单证生成")
+                    st.subheader("📦 Automated Document Generation")
                     col1, col2, col3 = st.columns(3)
 
                     with col1:
-                        # 输出 3：CSV 导出
+                        # Output 3: CSV Export
                         csv = df_items.to_csv(index=False).encode('utf-8')
-                        st.download_button("下载结构化数据 (CSV)", csv, "clearance_data.csv", "text/csv")
+                        st.download_button("Download Structured Data (CSV)", csv, "clearance_data.csv", "text/csv")
 
                     with col2:
-                        st.button("生成标准发票 (PDF) - 开发中")
+                        st.button("Generate Standard Invoice (PDF) - In Development")
 
                     with col3:
-                        st.button("生成装箱单 (PDF) - 开发中")
+                        st.button("Generate Packing List (PDF) - In Development")
 
                 except:
-                    st.warning("AI 返回的不是标准结构，正在尝试解析...")
+                    st.warning("AI did not return standard structure, attempting to parse...")
                     st.markdown(result)
                 
             except Exception as e:
