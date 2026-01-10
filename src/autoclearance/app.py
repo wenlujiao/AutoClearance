@@ -72,5 +72,32 @@ if run_btn:
                 st.subheader("Audit Report")
                 st.markdown(result)
                 
+                # --- Excel Generation Logic ---
+                st.markdown("---")
+                st.subheader("📥 Download Report")
+
+                # Convert the result to a DataFrame (Table format)
+                # 目前我们要把 AI 的文字报告放进 Excel
+                df = pd.DataFrame({
+                    "Audit Report": [result],
+                    "Source Data": [invoice_text]
+                })
+
+                # Create an in-memory buffer to save the Excel file
+                buffer = BytesIO()
+                with pd.ExcelWriter(buffer, engine='openpyxl') as writer:
+                    df.to_excel(writer, index=False, sheet_name='Audit Result')
+                
+                # Make sure the buffer is ready to be read
+                buffer.seek(0)
+
+                # Show the Download Button
+                st.download_button(
+                    label="Download Excel Report 📊",
+                    data=buffer,
+                    file_name="audit_report.xlsx",
+                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                )
+                
             except Exception as e:
                 st.error(f"An error occurred: {e}")
