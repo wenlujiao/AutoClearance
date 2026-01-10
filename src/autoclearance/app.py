@@ -7,7 +7,7 @@ st.set_page_config(page_title="AutoClearance AI", layout="wide")
 # --- password seting
 password = st.sidebar.text_input
 if password != "123456":
-    st.info( Please enter the password to access.")
+    st.info("Please enter the password to access.")
     st.stop()
 # -------------------------
 st.title("AutoClearance: AI Compliance Audit System")
