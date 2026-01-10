@@ -1,13 +1,14 @@
 
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
+import os
 
 @CrewBase
 class AutoclearanceCrew():
 	"""Autoclearance crew"""
 
-	agents_config = 'config/agents.yaml'
-	tasks_config = 'config/tasks.yaml'
+	agents_config = os.path.join(os.path.dirname(__file__), 'config', 'agents.yaml')
+	tasks_config = os.path.join(os.path.dirname(__file__), 'config', 'tasks.yaml')
 
 	@agent
 	def ingest_agent(self) -> Agent:
