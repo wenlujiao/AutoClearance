@@ -22,7 +22,7 @@ class AutoclearanceCrew():
 	def auditor_agent(self) -> Agent:
 		return Agent(
 			config=self.agents_config['auditor_agent'],
-			verbose=True，
+			verbose=True,
 		)
 
 	@task
