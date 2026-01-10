@@ -14,10 +14,14 @@ st.title("AutoClearance: AI Compliance Audit System")
 st.markdown("---")
 
 # 2. Sidebar: Input Area
-st.subheader("Upload Invoice (PDF)")
+with st.sidebar:
+    st.header("Invoice Data Entry")
+
+    # --- PDF Upload Section ---
+    st.subheader("Upload Invoice (PDF)")
     uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
 
-    invoice_text = ""
+    invoice_text = ""  # Initialize as empty string
 
     if uploaded_file is not None:
         try:
@@ -32,8 +36,12 @@ st.subheader("Upload Invoice (PDF)")
         except Exception as e:
             st.error(f"Error reading PDF: {e}")
 
+    # If no file uploaded, allow manual input
     if not invoice_text:
         invoice_text = st.text_area("Or paste invoice text here:", height=300)
+    
+    # Run Button
+    run_btn = st.button("Start AI Audit", type="primary")
     
     # Run Button
     run_btn = st.button("Start AI Audit", type="primary")
